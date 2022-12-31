@@ -8,7 +8,9 @@ redirect_from:
   - /about.html
 ---
 
-I'm a 3rd year Computer Science PhD student at University of Chicago working with [Prof. Rebecca Willett](https://willett.psd.uchicago.edu). My interests lie at Machine Learning/Computer Vision with scientific applications. 
+I am a 3rd-year Computer Science Ph.D. student at the University of Chicago. I am fortunate to have the opportunity to work under the guidance of Professor [Professor Rebecca Willett](https://willett.psd.uchicago.edu). My research interests lie at the intersection of Machine Learning and Computer Vision, with an emphasis on scientific applications. I am deeply committed to using my skills and expertise to impact the world positively, and I am excited to continue exploring and advancing the frontiers of these fields through my doctoral studies.
+
+<!-- I'm a 3rd year Computer Science PhD student at University of Chicago working with [Prof. Rebecca Willett](https://willett.psd.uchicago.edu). My interests lie at Machine Learning/Computer Vision with scientific applications.  -->
 
 <!-- This is the front page of a website that is powered by the [academicpages template](https://github.com/academicpages/academicpages.github.io) and hosted on GitHub pages. [GitHub pages](https://pages.github.com) is a free service in which websites are built and hosted from code and data stored in a GitHub repository, automatically updating when a new commit is made to the respository. This template was forked from the [Minimal Mistakes Jekyll Theme](https://mmistakes.github.io/minimal-mistakes/) created by Michael Rose, and then extended to support the kinds of content that academics have: publications, talks, teaching, a portfolio, blog posts, and a dynamically-generated CV. You can fork [this repository](https://github.com/academicpages/academicpages.github.io) right now, modify the configuration and markdown files, add your own PDFs and other content, and have your own site for free, with no ads! An older version of this template powers my own personal website at [stuartgeiger.com](http://stuartgeiger.com), which uses [this Github repository](https://github.com/staeiou/staeiou.github.io).
 
