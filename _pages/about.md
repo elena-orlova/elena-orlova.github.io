@@ -8,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-I am a 3rd-year Computer Science Ph.D. student at the University of Chicago. I am fortunate to have the opportunity to work under the guidance of Professor [Professor Rebecca Willett](https://willett.psd.uchicago.edu). My research interests lie at the intersection of Machine Learning and Computer Vision, with an emphasis on scientific applications. I am deeply committed to using my skills and expertise to impact the world positively, and I am excited to continue exploring and advancing the frontiers of these fields through my doctoral studies.
+I am a 3rd-year Computer Science Ph.D. student at the University of Chicago. I am fortunate to have the opportunity to work under the guidance of [Professor Rebecca Willett](https://willett.psd.uchicago.edu). My research interests lie at the intersection of Machine Learning and Computer Vision, with an emphasis on scientific applications. I am deeply committed to using my skills and expertise to impact the world positively, and I am excited to continue exploring and advancing the frontiers of these fields through my doctoral studies.
 
 <!-- I'm a 3rd year Computer Science PhD student at University of Chicago working with [Prof. Rebecca Willett](https://willett.psd.uchicago.edu). My interests lie at Machine Learning/Computer Vision with scientific applications.  -->
 
