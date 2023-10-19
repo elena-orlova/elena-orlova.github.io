@@ -1,13 +1,14 @@
 ---
 title: 'Tensor Train and Tensor Ring Decompositions for Neural Networks Compression'
-date: 2022-01-27
-permalink: /posts/22/01/TT_TR_NN_compression/
+date: 2023-01-27
+permalink: /posts/23/01/TT_TR_NN_compression/
 tags:
   - tensor_networks
   - compression
   - TT_decomposition
   - TR_decomposition
   - ML
+  - NLP
 ---
 
 This post is based on ["Tenzorized Embedding Layers" paper](https://arxiv.org/pdf/1901.10787.pdf). Here, I'd like to explain the main ideas from this paper and show some results.
