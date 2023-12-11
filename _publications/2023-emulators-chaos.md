@@ -4,7 +4,7 @@ collection: publications
 #permalink: /publication/2010-10-01-paper-title-number-2
 excerpt: 'We introduce a framework preserving invariant measures of chaotic attractors, offering two approaches: one utilizing optimal transport distance with expert knowledge about the system dynamics and another using a contrastive learning framework without specialized information. Empirical results demonstrate the effectiveness of our method in preserving invariant measures across various chaotic systems.'
 date: 2023-11-12
-venue: 'NeurIPS 2023'
+venue: 'NeurIPS'
 #paperurl: 'http://academicpages.github.io/files/paper2.pdf'
 citation: 'R. Jiang, PY Lu, E. Orlova, R. Willett'
 ---

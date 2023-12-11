@@ -8,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-I am a PhD student in computer science at the University of Chicago. I am honored to work with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research interests are machine learning, with an emphasis on scientific applications: an application of generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.  
+I am a PhD student in computer science at the University of Chicago. I am honored to work with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research interests are machine learning, with an emphasis on scientific applications: using generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.  
 
 Before my PhD, I obtained bachelor's degree at mathematics, and master's degree in mathematics and computer science.
 
