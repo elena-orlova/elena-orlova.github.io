@@ -3,6 +3,7 @@ title: "Beyond Ensemble Averages: Leveraging Climate Model Ensembles for Subseas
 collection: publications
 #permalink: /publication/2009-10-01-paper-title-number-1
 # excerpt: 'Operational forecasting has long lacked accurate temperature and precipitation predictions on subseasonal time scales - two to two months in advance. These forecasts would have immense value in agriculture, insurance, and economics. Our paper describes an application of machine learning techniques to forecast monthly average precipitation and 2-meter temperature using physics-based predictions and observational data two weeks in advance for the entire continental United States. The proposed models outperform common benchmarks such as historical averages and averages of physics-based predictors. Our fundings suggest that utilizing the full set of physics-based predictions instead of the average enhances the accuracy of the final forecast.'
+excerpt: ''
 date: 2022-12-12
 venue: 'arxiv'
 #paperurl: 'http://elena-orlova.github.io/files/paper_SSF.pdf'
