@@ -1,0 +1,581 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5TBGHYXZG3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-5TBGHYXZG3');
+    </script>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Tensor Train and Tensor Ring Decompositions for Neural Networks Compression - Elena Orlova</title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="Elena Orlova">
+<meta property="og:title" content="Tensor Train and Tensor Ring Decompositions for Neural Networks Compression">
+
+
+  <link rel="canonical" href="http://localhost:4000/posts/22/01/TT_TR_NN_compression/">
+  <meta property="og:url" content="http://localhost:4000/posts/22/01/TT_TR_NN_compression/">
+
+
+
+  <meta property="og:description" content="This post is based on “Tenzorized Embedding Layers” paper. Here, I’d like to explain the main ideas from this paper and show some results.">
+
+
+
+
+
+  
+
+  
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2022-01-27T00:00:00-08:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "Elena Orlova",
+      "url" : "http://localhost:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://localhost:4000/feed.xml" type="application/atom+xml" rel="alternate" title="Elena Orlova Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://localhost:4000/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+    
+
+<!-- start custom head snippets -->
+
+<!-- <link rel="apple-touch-icon" sizes="57x57" href="http://localhost:4000/images/apple-touch-icon-57x57.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="60x60" href="http://localhost:4000/images/apple-touch-icon-60x60.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="72x72" href="http://localhost:4000/images/apple-touch-icon-72x72.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="76x76" href="http://localhost:4000/images/apple-touch-icon-76x76.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="114x114" href="http://localhost:4000/images/apple-touch-icon-114x114.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="120x120" href="http://localhost:4000/images/apple-touch-icon-120x120.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="144x144" href="http://localhost:4000/images/apple-touch-icon-144x144.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="152x152" href="http://localhost:4000/images/apple-touch-icon-152x152.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:4000/images/apple-touch-icon-180x180.png?v=M44lzPylqQ">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png?v=M44lzPylqQ" sizes="32x32">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/android-chrome-192x192.png?v=M44lzPylqQ" sizes="192x192">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-96x96.png?v=M44lzPylqQ" sizes="96x96">
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-16x16.png?v=M44lzPylqQ" sizes="16x16"> -->
+<link rel="apple-touch-icon" href="http://localhost:4000/images/aapple-touch-icon.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="16x16" href="http://localhost:4000/images/favicon-16x16.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="32x32" href="http://localhost:4000/images/favicon-32x32.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="192x192" href="http://localhost:4000/images/android-chrome-192x192.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="512x512" href="http://localhost:4000/images/android-chrome-512x512.png?v=M44lzPylqQ">
+<link rel="manifest" href="http://localhost:4000/images/manifest.json?v=M44lzPylqQ">
+<!-- <link rel="mask-icon" href="http://localhost:4000/images/safari-pinned-tab.svg?v=M44lzPylqQ" color="#000000"> -->
+<link rel="mask-icon" href="http://localhost:4000/images/image2vector.svg?v=M44lzPylqQ" color="#000000">
+<link rel="shortcut icon" href="/images/favicon.ico?v=M44lzPylqQ">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="http://localhost:4000/images/android-chrome-192x192.png?v=M44lzPylqQ">
+<!-- <meta name="msapplication-TileImage" content="http://localhost:4000/images/mstile-144x144.png?v=M44lzPylqQ"> -->
+<meta name="msapplication-config" content="http://localhost:4000/images/browserconfig.xml?v=M44lzPylqQ">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="http://localhost:4000/assets/css/academicons.css"/>
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="http://localhost:4000/">Elena Orlova</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/publications/">Publications</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://localhost:4000/year-archive/">Blog Posts</a></li>
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="http://localhost:4000/images/profile.jpg" class="author__avatar" alt="Elena Orlova">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name">Elena Orlova</h3>
+    <p class="author__bio">CS PhD student at UChicago</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+      
+      
+      
+        <li><a href="mailto:eorlova@uchicago.edu"><i class="fas fa-fw fa-envelope" aria-hidden="true"></i> Email</a></li>
+      
+      
+       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <li><a href="https://github.com/elena-orlova"><i class="fab fa-fw fa-github" aria-hidden="true"></i> Github</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <li><a href="https://scholar.google.com/citations?user=-z_QAxcAAAAJ&hl=ru"><i class="fas fa-fw fa-graduation-cap"></i> Google Scholar</a></li>
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Tensor Train and Tensor Ring Decompositions for Neural Networks Compression">
+    <meta itemprop="description" content="This post is based on “Tenzorized Embedding Layers” paper. Here, I’d like to explain the main ideas from this paper and show some results.">
+    <meta itemprop="datePublished" content="January 27, 2022">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Tensor Train and Tensor Ring Decompositions for Neural Networks Compression
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  10 minute read
+	
+</p>
+          
+        
+        
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2022-01-27T00:00:00-08:00">January 27, 2022</time></p>
+        
+        
+             
+        
+    
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        <p>This post is based on <a href="https://arxiv.org/pdf/1901.10787.pdf">“Tenzorized Embedding Layers” paper</a>. Here, I’d like to explain the main ideas from this paper and show some results.</p>
+
+<p>One of the key components of natural language processing (NLP) models is embedding layers, which transform input words into real vectors. This can be represented as a lookup table (or a matrix). The large vocabulary leads to enormous weight matrices. State-of-the-art  NLP networks are large, with millions to billions of parameters. However, computational resources are oftern limited, which is an essential problem in NLP research. What can we do about that?</p>
+
+<blockquote>
+  <p>The purpose of tensor decompositions is to represent a given tensor as a product of smaller tensors called cores with fewer parameters while preserving important information.</p>
+</blockquote>
+
+<p>Tensor decompositions, such as Tucker decomposition, canonical decomposition, and Tensor Train (TT) decomposition <a href="https://doi.org/10.1137/090752286">(1)</a>, can be applied for dimensionality reduction in a varity of tasks. For instance, signal and data compression, or compression of neural networks layers. In the last case, model parameters are factorized into smaller cores of the corresponding tensor decomposition. For example, TT decomposition was utilized for a compression of a linear layer <a href="https://proceedings.neurips.cc/paper/2015/hash/6855456e2fe46a9d49d3d3af4f57443d-Abstract.html">(2)</a>, what was extended to a compression of convolutional layer with canonical decomposition <a href="https://arxiv.org/pdf/1412.6553">(3)</a>. The same holds for Tensor Ring (TR) decomposition <a href="https://openaccess.thecvf.com/content_cvpr_2018/papers/Wang_Wide_Compression_Tensor_CVPR_2018_paper.pdf">(4)</a>.</p>
+
+<p>Here, I’d like to show how TT and TR decompositions can be used to compress the embedding layer. 
+$\def\uuX{\underline{\bf X}}$
+$\def\uuG{\underline{\bf G}}$
+$\newcommand\R{\mathbb{R}}$
+$\newcommand\bG{\bf G}$
+$\newcommand\bX{\bf X}$
+$\newcommand\bU{\bf U}$
+$\newcommand\bV{\bf V}$</p>
+
+<h1 id="tensor-train-decomposition">Tensor Train decomposition</h1>
+
+<p>Suppose we have a $N$th-order tensor $\uuX \in \R^{I_1 \times I_2 \times \dots \times I_N}$. The TT representation of $\uuX$ is given as</p>
+
+\[x_{i_1, i_2, \dots, i_N} = \sum_{r_1=1}^{R_1} \sum_{r_1=2}^{R_2} \dots \sum_{r_{N-1}=1}^{R_{N-1}} g^{(1)}_{1, i_1, r_1} \cdot g^{(2)}_{r_1, i_1, r_2} \cdot \dots \cdot g^{(N)}_{r_{N-1}, i_N, 1},\]
+
+<p>or, equivalently,</p>
+
+\[x_{i_1, i_2, \dots, i_N} =  {\bG}^{(1)}_{i_1} \cdot {\bG}^{(2)}_{i_1} \cdot ... \cdot {\bG}^{(N)}_{i_N},\]
+
+<p>where slice matrices are defined as
+\({\bG}_{i_n}^{(n)} =\) $\uuG^{(n)}(:, i_n, :) \in \mathbb{R}^{R_{n-1} \times R_n}, i_n = 1, 2, \dots, I_N$
+with $\uuG^{(n)}$ being the $i_n$th lateral slice of A core tensor $\uuG^{(n)} \in \mathbb{R}^{R_{n-1}\times I_n \times R_n},$ $n=1, 2, \dots,N$ and $R_0 = R_N = 1$ by definition.</p>
+
+<p>The key idea of TT decomposition is demonstrated in the next figure. The minimal values of ${R_k}_{k=1}^{N-1}$ are called TT–ranks for which the TT–decomposition exists.</p>
+<pre>
+
+</pre>
+
+<p><img src="../../../../images/TT.png?raw=true | width=10" alt="TT" />
+<!-- <img src="https://github.com/favicon.ico" width="48"> --></p>
+<div align="center">TT decompostion illustration</div>
+
+<pre>
+
+</pre>
+
+<p>The total number of parameters in TT decomposition can be evaluated as $\sum_{k=1}^N R_{k-1} I_k R_{k}$. Hence, <strong>if there are core tensors with small ranks, the total number of elements required to represent a given tensor in TT–format is significantly smaller than the number of elements in a full tensor $\sum_{k=1}^N I_k$.</strong> This remark makes the application of TT decomposition appealing in a lot of problems related to extremely large data.</p>
+
+<h1 id="tensor-ring-decomposition">Tensor Ring decomposition</h1>
+<p>The tensor ring format of a tensor $\uuX \in \mathbb{R}^{I_1 \times \cdots \times I_N}$ is defined as</p>
+
+\[x_{i_1, i_2, \dots, i_N} = \text{Trace}\left( \bG^{(1)}_{i_1} \cdot \ldots \cdot \bG^{(N)}_{i_N} \right),\]
+
+<p>or in index-form</p>
+
+\[x_{i_1, i_2, \dots, i_N} = \sum_{r_0 = 1 }^{R_{0}} \cdots  \sum_{r_{N-1} = 1 }^{R_{N-1}} g^{(1)}_{r_0, i_1, r_1} \cdot \ldots \cdot g^{(N)}_{r_{N-1}, i_N, r_0},\]
+
+<p>where \({\bG}^{(n)}_{i_n}\) is an $i_n$th slice matrix of a tensor $\uuG^{(n)}$ $\in 
+\R^{R_{n-1}\times I_n \times R_n}$. The last latent tensor $\uuG^{(N)}$ is of size $R_{N-1} \times I_N \times R_0$, i.e., $R_{N} = R_0$.
+<!-- is an $i_n$th slice matrix of the tensor $\uuG^{(n)} \in \mathbb{R}^{R_{n-1}\times I_n \times R_n}$.  The last latent tensor $\uuG^{(N)}$ is of size $R_{N-1} \times I_N \times R_0$, i.e., $R_{N} = R_0$. --></p>
+
+<p>The TR-format can be seen as a natural extension of the TT decomposition where $R_0=R_N=1$. The illustration of TR-format is given in next figure.</p>
+
+<p><img src="../../../../images/TR.png?raw=true" alt="TR" /></p>
+<div align="center">TR decompostion illustration</div>
+
+<pre>
+
+</pre>
+
+<p>However, the TR-format is known to have theoretical drawbacks compared to TT decomposition <a href="https://arxiv.org/pdf/1302.7121">(5)</a>. For example, it was found that in case of TR decomposition, minimal TR-ranks for a tensor need not be unique <a href="https://arxiv.org/pdf/1801.02662.pdf">(6)</a> (not even up to permutation of the indices $i_1, \dots , i_N$), resulting in problems in their estimation. On the other hand, numerical experiments show that the TR-format leads to lower ranks of the core tensors compared to the TT-format <a href="https://arxiv.org/pdf/1907.01011">(7)</a>, which means higher compression ratios and lower storage costs.</p>
+
+<h1 id="tt-and-tr-embeddings">TT and TR embeddings</h1>
+
+<p>We aim to replace a regular embedding matrix with a more compact, yet powerful and trainable, format which would allow us to efficiently transform input words into vector representations.</p>
+
+<p>Let $\bX \in \mathbb{R}^{I \times J}$ be a matrix of size $I \times J$. The goal is to get natural factors of its dimensions $I = \prod_{n=1}^N I_n$ and $J = \prod_{n=1}^N J_n$ and then reshape this matrix to $N$th-order tensor $\uuX \in \mathbb{R}^{I_1 J_1 \times I_2 J_2 \times \dots \times I_N J_N}$ whose $n$-th dimension is of length $I_n J_n$ and is indexed by the tuple
+$(i_n , j_n)$. We also can treat this procedure as the bijection that map rows and columns of the original matrix to the $N$-dimensional vector-indices. Than TT decomposition according to Eq. (1) is applied to this tensor to get a compact representation:</p>
+
+\[\uuX((i_1, j_1), (i_2, j_2), \dots, (i_N, j_N)) =  \uuG^{(1)}((i_1, j_1), :)  \ldots \uuG^{(N)}(:, (i_N, j_N)).\]
+
+<p>The described representation of a matrix in the TT–format is called a TT–matrix. The obtained factorizations $(I_1, I_2, \dots I_N ) \times (J_1,J_2, \dots J_N)$ will be treated as shapes of a TT– matrix, or TT–shapes. The idea of constructing the TT– matrix from a given matrix is showed in next figure for a 3-dimensional tensor.</p>
+
+<p><img src="../../../../images/tt_matrix.png?raw=true" alt="TT-matrix" /></p>
+<div align="center">TT compression of an embedding layer: reshaping a matrix into a tensor, then using TT decomposition</div>
+<pre>
+
+</pre>
+
+<p>Similarly, we can define a TR-matrix by reshaping a given matrix $\bX$ into a tensor $\uuX \in \mathbb{R}^{I_1 J_1 \times I_2 J_2 \times \dots \times I_N J_N}$:</p>
+
+\[\uuX((i_1, j_1), (i_2, j_2), \dots, (i_N, j_N)) =  \text{Trace}(\uuG^{(1)}((:,i_1, j_1), :)  \ldots \uuG^{(N)}(:, (i_N, j_N), :)).\]
+
+<p>A concept of building the TR– matrix from the given matrix is showed in next figure for a
+3-dimensional tensor.</p>
+
+<p><img src="../../../../images/tr_matrix.png?raw=true" alt="TT-matrix" /></p>
+<div align="center">TR compression of an embedding layer: reshaping a matrix into a tensor, then using TR decomposition</div>
+<pre>
+
+</pre>
+
+<p>Now we can introduce a concept of a tensorized embedding layer:</p>
+
+<blockquote>
+  <p>A TT/TR-embedding layer is a layer where TT/TR–cores are trainable parameters, and they are represented as a TT/TR–matrix which can be transformed into an embedding layer $\bX \in \mathbb{R}^{I \times J}$. The algorithm requires to set the ranks in advance to define the cores size, and they are considered to be hyperparameters of the layer. The ranks values are crucially important since they determine and control the compression ratio.</p>
+</blockquote>
+
+<p>To obtain an embedding for a specific word indexed $i$ in a vocabulary, we transform
+a row index $i$ into an N-dimensional vector index $(i_1; : : : ; i_N)$, and compute components of TT or TR embedding. Note, that the evaluation of all its components is equal to choosing the specific slices and running a sequence of matrix multiplications, which is implemented efficiently in modern linear algebra modules.</p>
+
+<h1 id="results">Results</h1>
+
+<p>Let me show results on a simple task – sentiment analysis. Sentiment analysis refers to predicting a polarity of a sentence.</p>
+
+<p>The proposed approach is compared with the following baselines:</p>
+<ul>
+  <li>Standard embedding layer with the baseline compression ratio 1.</li>
+  <li>Embedding layer is parametrized by two matrices $\bX = \bU \bV^T$ where $\bU \in \R^{I\times R}$  and $\bU \in \R^{J\times R}$. Then the compression ratio is $\frac{IJ}
+{(I+J)R} \sim \frac{J}{R}$.</li>
+</ul>
+
+<!-- Transformers in language modeling and machine translation tasks ulilize the same weight
+matrix for their embedding and softmax layers which already significantly reduces model
+size. So, in our tests, we apply two separate TT/TR decompositions of the same shape for embedding and softmax layers and report the compression ratio as $\frac{|V|d_\text{model}}{2 \times \text{nb. of TT params }}$. -->
+
+<p>We test our approach on popular datasets such as the IMDB dataset with two classes, and the Stanford Sentiment Treebank (SST)  with five classes. Our model consists of a standard bidirectional two-layer LSTM with a hidden size of 128 and a dropout rate of 0.5. For the embedding layer, we used the most frequent 25,000 words for IMDB and 17,200 for SST, and transformed them into a J-dimensional space with a regular embedding layer or a TT/TR embedding layer.</p>
+
+<p><img src="../../../../images/red_imbdb.png?raw=true" alt="res1" /></p>
+<div align="center">Sentiment analysis, LSTM with either TT-embedding or TR-embedding on IMDB dataset.
+The model is trained for 10 epochs. Embedding compression is calculated as the fraction between
+the number of parameters in the full embedding layer and TT/TR–embedding layer.</div>
+<pre>
+
+</pre>
+
+<p><img src="../../../../images/res_sst.png?raw=true" alt="res2" /></p>
+<div align="center">Sentiment analysis, LSTM with either TT-embedding or TR-embedding on SST dataset.
+The model is trained for 10 epochs. Ranks were set to 8 or 16.</div>
+<pre>
+
+</pre>
+
+<p>The results of our experiments reveal that the models with the compressed embedding layer performed similarly or even better than the models with standard embedding layers. For example, on the IMDB dataset, the TT embedding layer with a rank of 16 and a test accuracy of 89.7% outperformed our baseline model with a test accuracy of 88.6%. Furthermore, the compressed model had significantly fewer parameters than the full model (7.19 million vs less than a million). Similarly, on the SST dataset, the model with the TR-embedding layer outperformed both the model with the regular embedding layer and the TT layer. In the case of matrix low-rank factorization, we would obtain compression ratios $\frac{J}{R} = \frac{256}{8} =32$ or $\frac{256}{16}= 16$ which are definitely worse compared to tensor factorization techniques.</p>
+
+<p>The obtained slightly better test accuracy of the models with tenzorized embedding layers
+suggests that imposing specific tensorial low–rank structure on the matrix of embedding layer can be considered as a particular case of regularization, thus, potentially the model generalize better.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>To conclude, TT and TR decompositions can be used to compress neural networks. We use them to compress embedding layers in NLP models. This method can be easily integrated into any deep learning framework and trained via backpropagation, while capitalizing on reduced memory requirements and increased training batch size. More details can be found in the <a href="https://arxiv.org/pdf/1901.10787.pdf">paper</a> and code is available <a href="https://github.com/tt-embedding/tt-embeddings">here</a>.</p>
+
+<h2 id="references">References</h2>
+<ol>
+  <li>Oseledets, Ivan V. “Tensor-train decomposition.” <em>SIAM Journal on Scientific Computing</em> 33.5 (2011): 2295-2317.</li>
+  <li>Novikov, Alexander, et al. “Tensorizing neural networks.” <em>Advances in neural information processing systems</em> 28 (2015).</li>
+  <li>Lebedev, Vadim, et al. “Speeding-up convolutional neural networks using fine-tuned cp-decomposition.” <em>arXiv preprint arXiv:1412.6553 (2014)</em>.</li>
+  <li>Wang, Wenqi, et al. “Wide compression: Tensor ring nets.” <em>Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition.</em> 2018.</li>
+  <li>Grasedyck, Lars, Daniel Kressner, and Christine Tobler. “A literature survey of low‐rank tensor approximation techniques.” <em>GAMM‐Mitteilungen</em> 36.1 (2013): 53-78.</li>
+  <li>Ye, Ke, and Lek-Heng Lim. “Tensor network ranks.” a<em>rXiv preprint arXiv:1801.02662 (2018).</em></li>
+  <li>Zhao, Qibin, et al. “Learning efficient tensor representations with ring-structured networks.” <em>ICASSP 2019-2019 IEEE international conference on acoustics, speech and signal processing (ICASSP).</em> IEEE, 2019.</li>
+</ol>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://localhost:4000/tags/#compression" class="page__taxonomy-item" rel="tag">compression</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#ml" class="page__taxonomy-item" rel="tag">ML</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#tensor-networks" class="page__taxonomy-item" rel="tag">tensor_networks</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#tr-decomposition" class="page__taxonomy-item" rel="tag">TR_decomposition</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://localhost:4000/tags/#tt-decomposition" class="page__taxonomy-item" rel="tag">TT_decomposition</a>
+    
+    </span>
+  </p>
+
+
+
+
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=http://localhost:4000/posts/22/01/TT_TR_NN_compression/" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/posts/22/01/TT_TR_NN_compression/" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/posts/22/01/TT_TR_NN_compression/" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<a href="/sitemap/">Sitemap</a>
+<!-- end custom footer snippets -->
+
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/elena-orlova"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://localhost:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Elena Orlova. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a>, a fork of <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script src="http://localhost:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  </body>
+</html>
+
