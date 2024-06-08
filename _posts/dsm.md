@@ -1,0 +1,235 @@
+---
+title: 'Simulating Quantum Mechanics with Deep Learning: Deep Stochastic Mechanics'
+date: 2024-06-01
+permalink: /posts/24/06/dsm/
+tags:
+  - quantum_mechanics
+  - ML
+  - generative_models
+---
+
+This post is based on ["Deep Stochastic Mechanics"](https://arxiv.org/abs/2305.19685) paper. Here, we'd like to explain main ideas and show some results from this paper.
+
+In the field of quantum physics, accurately simulating and predicting the behavior of particles is a computationally challenging task due to the curse of dimensionality. The computational complexity grows exponentially as the number of particles in the system increases, making it difficult to study large-scale quantum systems using traditional methods.
+
+Enter Deep Stochastic Mechanics (DSM), a novel approach that leverages deep learning to simulate quantum dynamics efficiently. It is a neural network(NN)-based method that directly samples from the probability density of the wave function, bypassing the need to explicitly estimate the wave function itself.
+
+
+Solving Schrödinger equation
+======
+
+At the heart of quantum mechanics lies the **Schrödinger equation** (SE) for $0 < t \le T$ and $\forall x\in \mathbb{R}^d$: 
+
+$$
+    i \hbar \partial_{t} \psi (x, t) = \Big[-\frac{\hbar^2}{2m} \frac{\partial^2}{\partial x^2} + V(x, t)\Big] \psi(x, t), 
+$$
+given an initial condition 
+
+$$
+  \psi(x, 0) = \psi_{0}(x),
+$$
+
+where $m$ is a particle's mass, $V(x, t)$ is a potential funtion that describes physics, $\psi(x, t): \mathbb{R}^d \times [0, T]\rightarrow \mathbb{C}$ is a **wave function**. 
+
+The **probability density** of finding a particle at position $x$ at time $t$￼is 
+
+$$\rho(x,t) = |\psi (x, t)|^2.$$
+
+---
+Goal: given an initial $\psi_0(x)$, draw samples from $|\psi (x, t)|^2$ for $t \in (0,T]$.  
+---
+One of possible solutions is to directly solve the SE for $\psi (x, t)$ using, for example, finite difference methods. Another approach is Monte-Carlo methods that rely on random sampling. They use a variational ansatz (a parametrized wave function) to approximate the true wave function. Existing methods for solving the time-dependent SE face significant challenges: 
+* *Classical numerical solvers* require discretizing the problem on a grid, leading to an *exponential growth* in computational complexity as the dimensionality increases. 
+* *Physics-informed neural networks (PINNs)* are a NN-based version of numerical solver that also suffer from an *exponential growth* of collocation points.
+* Variational methods like *time-dependent Variational Monte Carlo (t-VMC)* can bypass the curse of dimensionality.  However, their accuracy heavily depends on choosing a suitable ansatz, which can be challenging for complex systems. Additionally, the optimization process used to find the optimal ansatz parameters may suffer from numerical instabilities, depending on the method and initial conditions.
+* 
+> What if we can directly sample from the density $|\psi (x, t)|^2$ without estimating a wave function $\psi (x, t)$?
+
+DSM method
+======
+
+DSM takes a different approach by leveraging Nelson's stochastic mechanics [[Nelson, 1966]](https://journals.aps.org/pr/abstract/10.1103/PhysRev.150.1079), which establishes an equivalence between the time-dependent Schrödinger equation and a diffusion process. Assuming $\psi (x, t) = \sqrt{\rho(x, t)}e^{iS(x, t)}$, we define:
+
+$$ {\color{982715}
+\begin{align*}
+\text{{ current velocity:}} &&
+ v(x, t) &= \frac{\hbar}{m} \nabla S(x, t), \\
+\text{{ osmotic velocity:}} &&
+ u(x, t) &= \frac{\hbar}{2m} \nabla \log \rho(x, t).
+\end{align*}} $$
+Our method relies on the following stochastic process:
+$$
+    \mathrm{d}{\color{2D9090}X(t)} = \Big( {\color{982715}v} \big( {\color{2D9090}X(t)}, t \big)+ {\color{982715}u} \big({\color{2D9090}X(t)}, t \big) \Big)\mathrm{d}t + \sqrt{\frac{ \hbar}{m} }\mathrm{d} W, \qquad {\color{2D9090}X(0)} \sim \big|\psi_{0}\big|^2,
+$$
+
+which **corresponds to sampling from** $\rho = \big|\psi (x, t)\big|^2$; where $u$ is an osmotic velocity, $v$ is a current velocity and $\overset{\rightarrow}{W}$ is a standard (forward) Wiener process. Process $X(t)$ is called the *Nelsonian process*.
+
+
+We parametrize velocities $u, v$￼ via NNs, yielding a new process ${\color{2D9090}X^\theta(t)} \in \mathbb{R}^d$￼ that approximates the true process ￼$X(t)$:
+
+$$
+\mathrm{d}{\color{2D9090}X^\theta(t)} = \Big({\color{982715}v_{\theta}} \big({\color{2D9090}X^\theta(t)}, t \big)+ {\color{982715}u_{\theta} }\big({\color{2D9090}X^\theta(t)}, t \big) \Big)\mathrm{d}t + \sqrt{\frac{ \hbar}{m} }\mathrm{d} {W}.
+$$ 
+
+After integration over time, we get 
+
+$$
+  {\color{2D9090}X^\theta_{i+1}} = {\color{2D9090}X^\theta_{i}} + \big({\color{982715}v_{\theta}}({\color{2D9090}X^\theta_{i}}, t_{i})+ {\color{982715}u_{\theta}}({\color{2D9090}X^\theta_{i}}, t_{i}) \big)\epsilon + z,
+$$
+
+where $\epsilon > 0$ is a time step size, $0 \le i < \frac{T}{\epsilon}$, and ￼$z \sim \mathcal{N}\big(0, \frac{\hbar}{m}  \epsilon I_{d}\big)$.
+
+---
+Given trained velocities $u_\theta, v_\theta$, and the initial condition $X_0 \sim |\psi_{0}|^2$, we can produce samples from ￼$\rho$.
+---
+
+
+### How to train velocities $u_\theta, v_\theta$?
+
+the Schrödinger equation tells us the velocities should satisfy
+
+$$
+\begin{align}
+\partial_{t} v_\theta &= -\frac{1}{m} \nabla V + \langle u_\theta, \nabla u_\theta \rangle - \langle v_\theta, \nabla v_\theta \rangle + \frac{\hbar}{2m} \nabla \big(\text{div }  u_\theta \big) &&&&
+\\
+\partial_{t} u_\theta &=  - \nabla \langle v_\theta, u_\theta\rangle - \frac{\hbar}{2m} \nabla \big(\text{div }  v_\theta \big)&&&&
+\end{align}
+$$
+
+where $\nabla = \Big(\frac{\partial}{\partial x_{1}} , \ldots,\frac{\partial}{\partial x_{d}} \Big)$ is a gradient, $\langle \cdot , \cdot  \rangle$ is a scalar product, $\text{div } f(x) = \sum_{i=1}^d \frac{\partial}{\partial x_i}f(x)$ is a divergence operator.
+
+Additionally, the initial velocities should follow the initial conditions
+
+$$
+v_\theta(x, 0) = \frac{\hbar}{m}\nabla S_0(x) \quad \text{and} \quad u_\theta(x, 0) = \frac{\hbar}{2m}  \nabla \log \rho_0(x)
+$$
+
+These equations (1), (2) and (3) define 
+
+$$
+  \mathcal{L}_1 (v_{\theta}, u_{\theta}) = \Big\| \partial_{t} v_\theta +\frac{1}{m} \nabla V - \langle u_\theta, \nabla u_\theta\rangle + \langle v_\theta, \nabla v_\theta\rangle - \frac{\hbar}{2m} \nabla \big(\text{div }  u_\theta \big) \Big\|_2, 
+  $$
+  $$
+  \mathcal{L}_2 (v_{\theta}, u_{\theta})
+ = \Big \| \partial_{t} u_\theta + \nabla \langle v_\theta, u_\theta\rangle + \frac{\hbar}{2m} \nabla \big(\text{div }  v_\theta \big) \Big \|_2,
+$$
+$$
+  \mathcal{L}_3 (v_{\theta}, u_{\theta}) = \| u_\theta (x, 0) - u_0(x) \|_2 + \| v_\theta (x, 0) - v_0(x) \|_2
+$$
+
+
+Then our loss function to minimize is $\mathcal{L} (v_{\theta}, u_{\theta}) = \sum_{i=1}^3 \mathcal{L}_i (v_{\theta}, u_{\theta})$.
+
+
+* The trajectories are generated iteratively in time: $X^\theta_{i+1} = X^\theta_{i} + \big(v_{\theta}(X^\theta_{i}, t_{i})+ u_{\theta}(X^\theta_{i}, t_{i}) \big)\epsilon + z$.
+* At every epoch, generate a batch of trajectories $\{ X^\theta_{i, j} \}$, where $i$ corresponds to the time step and ￼$j$ is the number of samples.
+* Then these trajectories are used to evaluate the loss function and update the models’ weights.
+
+<pre>
+
+</pre>
+
+![TT](../../../../images/DSM_plot.png?raw=true | width=10)
+\<div align="center"> (a) DSM training scheme: at every epoch $\tau$, we generate $B$ full trajectories $\{ X_{ij}\}_{ij}$, $i=0, ..., N$, $j=1, ..., B$. Then, we update the weights of our NNs.  (b) An illustration of sampled trajectories at the early epoch. (c) An illustration of sampled trajectories at the final epoch.  (d) Collocation points for a grid-based solver where it should predict values of $\psi(x, t)$. Blue regions in the plots correspond to higher-density regions.  </div>
+
+<pre>
+
+</pre>
+
+---
+
+Instead of explicitly estimating the wave function, DSM directly samples from the probability density of the wave function by parametrizing the velocities of the diffusion process using neural networks.
+---
+
+
+### Theoretical guarantee
+
+
+**Theorem. (Strong convergence bound)**  We have the following bound between the processes $X$ (the Nelsonian process) and $X^\theta$ (its approximation with  $u_\theta, v_\theta$):
+
+$$
+\sup_{t\le T} \mathbb{E}\|X(t) - X^\theta(t)\|^2 \le C_{T} \mathcal{L}(v_{\theta}, u_{\theta}),
+$$
+where the constant $C_T$ depends on a time horizon $T$ and Lipschitz constants of  $u, v, u_\theta, v_\theta$.
+
+This theorem means that optimizing the loss leads to a convergence of the neural process $X^\theta$ to the Nelsonian process  $X$, and that the loss value directly translates into an improvement of error between the processes.
+
+# Experimental results
+
+Interacting bosons in a harmonic potential:
+
+$$
+  V(x, t) = \sum_i \frac{1}{2} m \omega^2 x_i^2 + \frac{1}{2} g \sum_{i, j} \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-(x_i - x_j)^2 / 2 \sigma^2}, 
+$$
+
+$$
+  \psi(x, 0) = e^{-\omega^2x^2/(2\hbar)}.
+$$,
+
+where $g$ controls the interaction strength. 
+
+* A numerical solution (Crank-Nicolson method) as a baseline. Comparison with PINNs and t-VMC. 
+* Comparing density and some statistics (mean and variance of coordinate as function of time). 
+* A NN architecture for DSM/PINN: a feed-forward linear model with skip connections and tanh activations.
+* A t-VMC ansatz representation: Hermite polynomials with two-body interaction terms that inherently incorporate knowledge about the ground truth solution. NN ansatz parameterization did not yield satisfactory results.
+
+
+<pre>
+
+</pre>
+
+![TT](../../../../images/tVMC-plots-camera-copy.pdf?raw=true | width=10)
+\<div align="center"> Simulation results for two interacting bosons in the harmonic oscillator.  </div>
+
+<pre>
+
+</pre>
+
+
+Let's try to run simulation for more particles:
+* The proposed DSM approach demonstrates robust performance, accurately following the ground truth and providing reasonable predictions for $d = 3, 4, 5$ interacting bosons
+* Our findings indicate that the t-VMC method can perform reasonably for low-dimensional systems, but its performance degrades as the number of interacting particles increases. This highlights the need for a scalable and carefully designed ansatz representation capable of capturing the complex behavior of particles in high-dimensional quantum systems.
+
+<pre>
+
+</pre>
+
+![TT](../../../../images/densities_compare_high_d.pdf?raw=true | width=10)
+\<div align="center"> Probability density plots for different numbers of interacting particles $d$. For five particles, our computer system does not allow running the Crank-Nicolson solver. </div>
+
+<pre>
+
+</pre>
+
+There are more experiments, including scaling studies, in our [full DSM paper](https://arxiv.org/abs/2305.19685).
+
+
+## Conclusions
+
+<!-- -   Developed ${\color{2D9090}\textbf{new efficient computational method}}$ for simulating quantum dynamics based on ${\color{2D9090}\textbf{Nelson’s stochastic mechanics}}$
+
+  -   Relies on **Markovian diffusion** and **does not require training data** 
+  -   **Adaptiv**e to latent low-dimensional support of density
+
+-   ${\color{2D9090}\text{Theoretical guarantees}}$ for our DSM method
+-   The experiments show ${\color{2D9090}\text{better performance}}$  of our method compared to the numerical solvers/PINNs/t-VMC both in terms of prediction quality and computation time
+ -->
+
+ -   Developed **new efficient computational method** for simulating quantum dynamics based on **Nelson’s stochastic mechanics**
+
+  -   Relies on *Markovian diffusion* and *does not require training data*
+  -   *Adaptive* to latent low-dimensional support of density
+
+-   **Theoretical guarantees** for our DSM method
+-   The experiments show *better performance*  of our method compared to the numerical solvers/PINNs/t-VMC both in terms of prediction quality and computation time
+
+
+---
+Since our DSM algorithm is a totally new approach for simulating quantum dynamics (solving time-dependent Schrodinger equation), which could be an alternative to t-VMC methods,  there are still some **challenges to resolve**. For example:
+- Studied relatively simple bosonic systems (though existing methods still struggle): how to extend our approach to fermions?
+- Considered a linear spinless SE on a flat manifold with a smooth potential
+- More detailed study of our algorithms itself, including more precise error bounds
+
+
+
+
