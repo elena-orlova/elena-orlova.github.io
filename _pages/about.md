@@ -8,9 +8,13 @@ redirect_from:
   - /about.html
 ---
 
-I am a PhD student in computer science at the University of Chicago. I am honored to work with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research interests are machine learning, with an emphasis on scientific applications: using generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.  
+I am a Compuer Scince PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks (GANs). My goal is to develop machine learning approaches that can significantly advance our understanding and prediction capabilities in challenging scientific fields.
 
-Before my PhD, I obtained bachelor's degree at mathematics, and master's degree in mathematics and computer science.
+<!-- My research interests are machine learning, with an emphasis on scientific applications: using generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.   -->
+
+Prior to my doctoral studies, I earned a Bachelor's degree in Mathematics and a Master's degree in Mathematics and Computer Science.
+
+<!-- Before my PhD, I obtained bachelor's degree at mathematics, and master's degree in mathematics and computer science. -->
 
 <!-- I am deeply committed to using my skills and expertise to impact the world positively, and I am excited to continue exploring and advancing the frontiers of these fields through my doctoral studies. -->
 
