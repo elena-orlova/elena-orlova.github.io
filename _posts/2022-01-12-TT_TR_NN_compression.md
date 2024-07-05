@@ -1,7 +1,7 @@
 ---
 title: 'Tensor Train and Tensor Ring Decompositions for Neural Networks Compression'
 date: 2023-01-27
-permalink: /posts/23/01/TT_TR_NN_compression/
+permalink: /posts/TT_TR_NN_compression/
 tags:
   - tensor_networks
   - compression
