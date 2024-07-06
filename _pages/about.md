@@ -8,7 +8,7 @@ redirect_from:
   - /about.html
 ---
 
-I am a Compuer Scince PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks (GANs). My goal is to develop machine learning approaches that can significantly advance our understanding and prediction capabilities in challenging scientific fields.
+I am a Compuer Scince PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks (GANs).
 
 <!-- My research interests are machine learning, with an emphasis on scientific applications: using generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.   -->
 
