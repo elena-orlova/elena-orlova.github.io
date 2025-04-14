@@ -8,11 +8,11 @@ redirect_from:
   - /about.html
 ---
 
-I am a Compuer science PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks (GANs).
+I am a Computer science PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks. Before my doctoral studies, I earned a Bachelor's degree in Mathematics and a Master's degree in Mathematics and Computer Science.
+
+I am also a co-founder of [Simulacra AI](https://simulacra-ai.com), a research-driven startup building the next generation of AI4Science models that simulate molecular interactions at the quantum level. 
 
 <!-- My research interests are machine learning, with an emphasis on scientific applications: using generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.   -->
-
-Before to my doctoral studies, I earned a Bachelor's degree in Mathematics, and a Master's degree in Mathematics and Computer Science.
 
 <!-- Before my PhD, I obtained bachelor's degree at mathematics, and master's degree in mathematics and computer science. -->
 
