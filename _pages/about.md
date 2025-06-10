@@ -8,9 +8,15 @@ redirect_from:
   - /about.html
 ---
 
-I am a Computer science PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks. Before my doctoral studies, I earned a Bachelor's degree in Mathematics and a Master's degree in Mathematics and Computer Science.
+I am co-founder and Chief Scientist at a research-driven startup [Simulacra AI](https://simulacra-ai.com), where we develop AI4Science models that simulate molecular interactions at the quantum level for applications in drug discovery and materials science.
 
-I am also a co-founder of [Simulacra AI](https://simulacra-ai.com), a research-driven startup building the next generation of AI4Science models that simulate molecular interactions at the quantum level. 
+I recently completed my PhD in Computer Science at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu) on machine learning applications in science. My research focuses on generative models for quantum simulations, emulators for chaotic systems, and weather forecasting techniques. I also have experience with tensor networks for neural network compression and generative adversarial networks for particle simulation in calorimeters.
+
+I hold a Bachelor's degree in Mathematics and a Master's in Mathematics and Computer Science.
+
+<!-- I am a Computer science PhD student at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu). My research focuses on machine learning and its scientific applications, with particular emphasis on generative models for quantum simulations, emulators for chaotic systems, and advanced techniques in weather forecasting. I have experience with tensor networks for neural network compression and generative adversarial networks. Before my doctoral studies, I earned a Bachelor's degree in Mathematics and a Master's degree in Mathematics and Computer Science.
+
+I am also a co-founder of [Simulacra AI](https://simulacra-ai.com), a research-driven startup building the next generation of AI4Science models that simulate molecular interactions at the quantum level.  -->
 
 <!-- My research interests are machine learning, with an emphasis on scientific applications: using generaive models for quantum simulations, emulators for chaotic systems, weather forecasting. I have experience with tensor networks for neural networks compression and generative adversarial networks.   -->
 
