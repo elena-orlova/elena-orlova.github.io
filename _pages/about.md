@@ -8,9 +8,9 @@ redirect_from:
   - /about.html
 ---
 
-I am co-founder and Chief Scientist at a research-driven startup [Simulacra AI](https://simulacra-ai.com), where we develop AI4Science models that simulate molecular interactions at the quantum level for applications in drug discovery and materials science.
+I'm the co-founder and Chief Scientist at [Simulacra AI](https://simulacra-ai.com), a research-driven startup where we're building AI models that simulate molecular interactions at the quantum level to accelerate drug discovery and materials science innovation.
 
-I recently completed my PhD in Computer Science at the University of Chicago, working with Professor [Rebecca Willett](https://willett.psd.uchicago.edu) on machine learning applications in science. My research focuses on generative models for quantum simulations, emulators for chaotic systems, and weather forecasting techniques. I also have experience with tensor networks for neural network compression and generative adversarial networks for particle simulation in calorimeters.
+I recently earned my PhD in Computer Science from the University of Chicago, where I worked with Professor [Rebecca Willett](https://willett.psd.uchicago.edu) on machine learning for scientific applications. My research spans generative models for quantum simulations, emulators for chaotic dynamical systems, and advanced weather forecasting methods. I've also worked on tensor network approaches for neural network compression and generative adversarial networks for high-energy physics applications, specifically particle simulation in calorimeters.
 
 I hold a Bachelor's degree in Mathematics and a Master's in Mathematics and Computer Science.
 
